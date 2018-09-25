@@ -17,7 +17,7 @@ def input_students
   while !name.empty? do
     # add student hash to the array
     students << {name: name, cohort: cohort.to_sym, nation: nation, height: height}
-    puts "Now we have #{students.count} students"
+    puts "Now we have #{students.count} student#{+ "s" if students.count > 1}"
     # get another name from the user
     puts "Please enter another student"
     name = gets.chomp.capitalize
@@ -45,7 +45,7 @@ def print(students)
   end
 end
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students\n".center(100)
+  puts "Overall, we have #{names.count} great student#{+ "s" if names.count > 1}\n".center(100)
 end
 # nothing happens until we call the methods
 students = input_students
