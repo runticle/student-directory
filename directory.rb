@@ -31,7 +31,7 @@ def input_students
   end
 end
 def print_header
-  puts "The students of Villans Academy".center(100)
+  puts "The students of Villains Academy".center(100)
   puts "-------------".center(100)
 end
 def print_students_list
@@ -91,6 +91,8 @@ def process(selection)
       show_students
     when "3"
       save_students
+    when "4"
+      load_students
     when "9"
       exit
     else
@@ -101,6 +103,7 @@ def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the list to students.csv"
+  puts "4. Load the list from students.csv"
   puts "9. Exit"
 end
 def show_students
@@ -113,6 +116,14 @@ def save_students
       student_data = [student[:name], student[:cohort], student[:height], student[:nation]]
       csv_line = student_data.join(",")
       file.puts csv_line
+  }
+  file.close
+end
+def load_students
+  file = File.open("students.csv", "r")
+  file.readlines.each { |line|
+    name, cohort, height, nation = line.chomp.split(",")
+    @students << {name: name, cohort: cohort.to_sym, height: height, nation: nation}
   }
   file.close
 end
