@@ -28,19 +28,18 @@ def input_students
   students
 end
 def print_header
-  puts "The students of Villans Academy"
-  puts "-------------"
+  puts "The students of Villans Academy".center(100)
+  puts "-------------".center(100)
 end
 def print(students)
   i = 0
   until students.count == i do
-    puts "#{i + 1}. #{students[i][:name]} (Height: #{students[i][:height]}m, Nationality: #{students[i][:nation]}, #{students[i][:cohort]} cohort)" if students[i][:name].length < 12
+    puts "#{i + 1}. #{students[i][:name]} (Height: #{students[i][:height]}m, Nationality: #{students[i][:nation]}, #{students[i][:cohort]} cohort)".center(100) if students[i][:name].length < 12
     i += 1
   end
-
 end
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students"
+  puts "Overall, we have #{names.count} great students\n".center(100)
 end
 # nothing happens until we call the methods
 students = input_students
