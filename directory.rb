@@ -6,8 +6,8 @@ def input_students
   name = gets.chomp.capitalize
   # add some more infomation
   puts "Enter student cohort"
-  input_cohort = gets.chomp
-  input_cohort == "" ? cohort = "november" : cohort = input_cohort
+  input_cohort = gets.chomp.capitalize
+  input_cohort == "" ? cohort = "November" : cohort = input_cohort
   puts "Enter students' height in metres"
   height = gets.chomp.to_s
   puts "Enter students' nationality"
@@ -22,8 +22,8 @@ def input_students
     name = gets.chomp.capitalize
     # add some more infomation
     puts "Enter student cohort"
-    input_cohort = gets.chomp
-    input_cohort == "" ? cohort = "november" : cohort = input_cohort
+    input_cohort = gets.chomp.capitalize
+    input_cohort == "" ? cohort = "November" : cohort = input_cohort
     puts "Enter students' height in metres"
     height = gets.chomp.to_s
     puts "Enter students' nationality"
@@ -59,7 +59,7 @@ def print_by_cohort
       cohorts_list[cohort].push(name)
     end
   }
-    cohorts_list.each { |cohort, names| "#{puts (cohort.to_s.capitalize + " Cohort").center(100)} #{names.each { |name| puts name.center(100) }}" }
+    cohorts_list.each { |cohort, names| "#{puts (cohort.to_s + " Cohort").center(100)} #{names.each { |name| puts name.center(100) }}" }
 end
 def print_by_name
   if @students.count > 0
@@ -89,6 +89,8 @@ def process(selection)
       students = input_students
     when "2"
       show_students
+    when "3"
+      save_students
     when "9"
       exit
     else
@@ -98,11 +100,21 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
+  puts "3. Save the list to students.csv"
   puts "9. Exit"
 end
 def show_students
   print_students_list
   print_footer
+end
+def save_students
+  file = File.open("students.csv", "w")
+  @students.each { |student|
+      student_data = [student[:name], student[:cohort], student[:height], student[:nation]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+  }
+  file.close
 end
 # nothing happens until we call the methods
 interactive_menu
