@@ -20,15 +20,15 @@ def input_students
     puts "Now we have #{students.count} student#{+ "s" if students.count > 1}"
     # get another name from the user
     puts "Please enter another student"
-    name = gets.chomp.capitalize
+    name = gets.delete("\n").capitalize
     # add some more infomation
     puts "Enter student cohort"
-    input_cohort = gets.chomp
+    input_cohort = gets.delete("\n")
     input_cohort == "" ? cohort = "november" : cohort = input_cohort
     puts "Enter students' height in metres"
-    height = gets.chomp.to_s
+    height = gets.delete("\n").to_s
     puts "Enter students' nationality"
-    nation = gets.chomp.capitalize
+    nation = gets.delete("\n").capitalize
   end
   # returns the array of students
   students
