@@ -22,10 +22,13 @@ def print_header
 end
 def print(students)
   puts "Print names beginning with which letter?"
+  puts "or press return to print all names"
   specific_letter = gets.chomp
   students.each_with_index do |student, index|
-    if student[:name][0].upcase == specific_letter.upcase
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+    if specific_letter == ""
+      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)" if student[:name].length < 12
+    elsif student[:name][0].upcase == specific_letter.upcase
+      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)" if student[:name].length < 12
     end
   end
 end
