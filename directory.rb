@@ -38,14 +38,20 @@ def print_header
   puts "-------------".center(100)
 end
 def print(students)
-  i = 0
-  until students.count == i do
-    puts "#{i + 1}. #{students[i][:name]} (Height: #{students[i][:height]}m, Nationality: #{students[i][:nation]}, #{students[i][:cohort]} cohort)".center(100) if students[i][:name].length < 12
-    i += 1
+  if students.count > 0
+    i = 0
+    until students.count == i do
+      puts "#{i + 1}. #{students[i][:name]} (Height: #{students[i][:height]}m, Nationality: #{students[i][:nation]}, #{students[i][:cohort]} cohort)".center(100) if students[i][:name].length < 12
+      i += 1
+    end
   end
 end
 def print_footer(names)
-  puts "Overall, we have #{names.count} great student#{+ "s" if names.count > 1}\n".center(100)
+  if names.count > 0
+    puts "Overall, we have #{names.count} great student#{+ "s" if names.count > 1}\n".center(100)
+  else
+    puts "There were no students found in the cohort.\n".center(100)
+  end
 end
 # nothing happens until we call the methods
 students = input_students
