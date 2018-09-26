@@ -8,7 +8,7 @@ def input_students
     :nation => "Enter student nationality."
   }
   puts questions[:name]
-  puts "To finish, just hit return thrice once all info has been added"
+  puts "To finish, just hit return once all info has been added"
   # get the first name
   name = STDIN.gets.chomp.capitalize
   # add some more infomation
@@ -20,12 +20,13 @@ def input_students
   puts questions[:nation]
   nation = STDIN.gets.chomp.capitalize
   # while the name is not empty, repeat this code
-  while !name.empty? do
+  while true do
     add_student_info(name, cohort, height, nation)
     puts "Now we have #{@students.count} student#{+ "s" if @students.count > 1}"
     # get another name from the user
     puts questions[:name]
     name = STDIN.gets.chomp.capitalize
+    break if name == ""
     # add some more infomation
     puts questions[:cohort]
     input_cohort = STDIN.gets.chomp.capitalize
@@ -134,10 +135,7 @@ end
 def load_students(filename)
   if File.exists?(filename)
     CSV.foreach(filename) do |row|
-      name = row[0]
-      cohort = row[1]
-      height = row[2]
-      nation = row[3]
+      name, cohort, height, nation = row[0..3]
       add_student_info(name, cohort, height, nation)
     end
     puts "Loaded #{@students.count} from #{filename}"
@@ -145,6 +143,9 @@ def load_students(filename)
     puts "Sorry, #{filename} doesn't exist."
     interactive_menu
   end
+end
+def check_loaded_students(filename)
+
 end
 def try_load_students
   filename = ARGV.first # first argument from the command line
