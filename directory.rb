@@ -1,32 +1,38 @@
 @students = [] # an empty array accessible to all methods
 require 'csv'
 def input_students
-  puts "Please enter the names of the students"
+  questions = {
+    :name => "Please enter a student",
+    :cohort => "Enter student cohort",
+    :height => "Enter student height",
+    :nation => "Enter student nationality."
+  }
+  puts questions[:name]
   puts "To finish, just hit return thrice once all info has been added"
   # get the first name
   name = STDIN.gets.chomp.capitalize
   # add some more infomation
-  puts "Enter student cohort"
+  puts questions[:cohort]
   input_cohort = STDIN.gets.chomp.capitalize
   input_cohort == "" ? cohort = "November" : cohort = input_cohort
-  puts "Enter students' height in metres"
+  puts questions[:height]
   height = STDIN.gets.chomp.to_s
-  puts "Enter students' nationality"
+  puts questions[:nation]
   nation = STDIN.gets.chomp.capitalize
   # while the name is not empty, repeat this code
   while !name.empty? do
     add_student_info(name, cohort, height, nation)
     puts "Now we have #{@students.count} student#{+ "s" if @students.count > 1}"
     # get another name from the user
-    puts "Please enter another student"
+    puts questions[:name]
     name = STDIN.gets.chomp.capitalize
     # add some more infomation
-    puts "Enter student cohort"
+    puts questions[:cohort]
     input_cohort = STDIN.gets.chomp.capitalize
     input_cohort == "" ? cohort = "November" : cohort = input_cohort
-    puts "Enter students' height in metres"
+    puts questions[:height]
     height = STDIN.gets.chomp.to_s
-    puts "Enter students' nationality"
+    puts questions[:nation]
     nation = STDIN.gets.chomp.capitalize
   end
 end
