@@ -3,31 +3,30 @@ def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return thrice once all info has been added"
   # get the first name
-  name = gets.chomp.capitalize
+  name = STDIN.gets.chomp.capitalize
   # add some more infomation
   puts "Enter student cohort"
-  input_cohort = gets.chomp.capitalize
+  input_cohort = STDIN.gets.chomp.capitalize
   input_cohort == "" ? cohort = "November" : cohort = input_cohort
   puts "Enter students' height in metres"
-  height = gets.chomp.to_s
+  height = STDIN.gets.chomp.to_s
   puts "Enter students' nationality"
-  nation = gets.chomp.capitalize
+  nation = STDIN.gets.chomp.capitalize
   # while the name is not empty, repeat this code
   while !name.empty? do
-    # add student hash to the array
-    @students << {name: name, cohort: cohort.to_sym, nation: nation, height: height}
+    add_student_info(name, cohort, height, nation)
     puts "Now we have #{@students.count} student#{+ "s" if @students.count > 1}"
     # get another name from the user
     puts "Please enter another student"
-    name = gets.chomp.capitalize
+    name = STDIN.gets.chomp.capitalize
     # add some more infomation
     puts "Enter student cohort"
-    input_cohort = gets.chomp.capitalize
+    input_cohort = STDIN.gets.chomp.capitalize
     input_cohort == "" ? cohort = "November" : cohort = input_cohort
     puts "Enter students' height in metres"
-    height = gets.chomp.to_s
+    height = STDIN.gets.chomp.to_s
     puts "Enter students' nationality"
-    nation = gets.chomp.capitalize
+    nation = STDIN.gets.chomp.capitalize
   end
 end
 def print_header
@@ -35,14 +34,19 @@ def print_header
   puts "-------------".center(100)
 end
 def print_students_list
-  puts "Enter 1 to print by cohort or 2 to print by name"
-  user = gets.chomp.to_i
-  if user == 1
+  puts "1. Print by cohort"
+  puts "2. Print by name"
+  puts "3. Return to menu"
+  user = STDIN.gets.chomp
+  case user
+  when "1"
     print_header
     print_by_cohort
-  elsif user == 2
+  when "2"
     print_header
     print_by_name
+  when "3"
+    interactive_menu
   else
     puts "Invalid option"
     exit
@@ -80,7 +84,7 @@ end
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 def process(selection)
@@ -92,8 +96,11 @@ def process(selection)
     when "3"
       save_students
     when "4"
-      load_students
+      puts "Load which file?"
+      filename = gets.chomp
+      load_students(filename)
     when "9"
+      puts "You quit"
       exit
     else
       puts "I don't know what you meant, try again"
@@ -111,21 +118,39 @@ def show_students
   print_footer
 end
 def save_students
-  file = File.open("students.csv", "w")
-  @students.each { |student|
-      student_data = [student[:name], student[:cohort], student[:height], student[:nation]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+  puts "Save to which file?"
+  filename = gets.chomp
+  file = File.open(filename, "w") {|file|
+    @students.each { |student|
+        student_data = [student[:name], student[:cohort], student[:height], student[:nation]]
+        csv_line = student_data.join(",")
+        file.puts csv_line
+    }
   }
-  file.close
+  puts "Saved to #{filename}"
 end
-def load_students
-  file = File.open("students.csv", "r")
-  file.readlines.each { |line|
-    name, cohort, height, nation = line.chomp.split(",")
-    @students << {name: name, cohort: cohort.to_sym, height: height, nation: nation}
-  }
-  file.close
+def load_students(filename)
+  if File.exists?(filename)
+    file = File.open(filename, "r") { |file|
+      file.readlines.each { |line|
+        name, cohort, height, nation = line.chomp.split(",")
+        add_student_info(name, cohort, height, nation)
+      }
+    }
+  puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry, #{filename} doesn't exist."
+    interactive_menu
+  end
+end
+def try_load_students
+  filename = ARGV.first # first argument from the command line
+  filename = "students.csv" if filename.nil? # get out of the method if it isn't given
+  load_students(filename)
+end
+def add_student_info(name, cohort, height, nation)
+  @students << {name: name, cohort: cohort.to_sym, height: height, nation: nation}
 end
 # nothing happens until we call the methods
+try_load_students
 interactive_menu
