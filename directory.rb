@@ -125,31 +125,21 @@ def save_students
   end
   puts "Saved to #{filename}"
 end
-# def load_students(filename)
-#   if File.exists?(filename)
-#     file = File.open(filename, "r") { |file|
-#       file.readlines.each { |line|
-#         name, cohort, height, nation = line.chomp.split(",")
-#         add_student_info(name, cohort, height, nation)
-#       }
-#     }
-#   puts "Loaded #{@students.count} from #{filename}"
-#   else
-#     puts "Sorry, #{filename} doesn't exist."
-#     interactive_menu
-#   end
-# end
-
 def load_students(filename)
-  CSV.foreach(filename) do |row|
-    name = row[0]
-    cohort = row[1]
-    height = row[2]
-    nation = row[3]
-    add_student_info(name, cohort, height, nation)
+  if File.exists?(filename)
+    CSV.foreach(filename) do |row|
+      name = row[0]
+      cohort = row[1]
+      height = row[2]
+      nation = row[3]
+      add_student_info(name, cohort, height, nation)
+    end
+    puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry, #{filename} doesn't exist."
+    interactive_menu
   end
 end
-
 def try_load_students
   filename = ARGV.first # first argument from the command line
   filename = "students.csv" if filename.nil? # get out of the method if it isn't given
@@ -159,5 +149,5 @@ def add_student_info(name, cohort, height, nation)
   @students << {name: name, cohort: cohort.to_sym, height: height, nation: nation}
 end
 # nothing happens until we call the methods
-# try_load_students
+try_load_students
 interactive_menu
