@@ -1,4 +1,5 @@
 @students = [] # an empty array accessible to all methods
+require 'csv'
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return thrice once all info has been added"
@@ -36,7 +37,6 @@ end
 def print_students_list
   puts "1. Print by cohort"
   puts "2. Print by name"
-  puts "3. Return to menu"
   user = STDIN.gets.chomp
   case user
   when "1"
@@ -45,11 +45,9 @@ def print_students_list
   when "2"
     print_header
     print_by_name
-  when "3"
-    interactive_menu
   else
     puts "Invalid option"
-    exit
+    interactive_menu
   end
 end
 def print_by_cohort
@@ -109,8 +107,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save the list"
+  puts "4. Load the list"
   puts "9. Exit"
 end
 def show_students
@@ -120,29 +118,38 @@ end
 def save_students
   puts "Save to which file?"
   filename = gets.chomp
-  file = File.open(filename, "w") {|file|
-    @students.each { |student|
-        student_data = [student[:name], student[:cohort], student[:height], student[:nation]]
-        csv_line = student_data.join(",")
-        file.puts csv_line
-    }
-  }
+  CSV.open(filename, "wb") do |csv|
+    @students.each do |student|
+      csv << [student[:name], student[:cohort], student[:height], student[:nation]]
+    end
+  end
   puts "Saved to #{filename}"
 end
+# def load_students(filename)
+#   if File.exists?(filename)
+#     file = File.open(filename, "r") { |file|
+#       file.readlines.each { |line|
+#         name, cohort, height, nation = line.chomp.split(",")
+#         add_student_info(name, cohort, height, nation)
+#       }
+#     }
+#   puts "Loaded #{@students.count} from #{filename}"
+#   else
+#     puts "Sorry, #{filename} doesn't exist."
+#     interactive_menu
+#   end
+# end
+
 def load_students(filename)
-  if File.exists?(filename)
-    file = File.open(filename, "r") { |file|
-      file.readlines.each { |line|
-        name, cohort, height, nation = line.chomp.split(",")
-        add_student_info(name, cohort, height, nation)
-      }
-    }
-  puts "Loaded #{@students.count} from #{filename}"
-  else
-    puts "Sorry, #{filename} doesn't exist."
-    interactive_menu
+  CSV.foreach(filename) do |row|
+    name = row[0]
+    cohort = row[1]
+    height = row[2]
+    nation = row[3]
+    add_student_info(name, cohort, height, nation)
   end
 end
+
 def try_load_students
   filename = ARGV.first # first argument from the command line
   filename = "students.csv" if filename.nil? # get out of the method if it isn't given
@@ -152,5 +159,5 @@ def add_student_info(name, cohort, height, nation)
   @students << {name: name, cohort: cohort.to_sym, height: height, nation: nation}
 end
 # nothing happens until we call the methods
-try_load_students
+# try_load_students
 interactive_menu
